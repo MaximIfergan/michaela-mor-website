@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Navigate after fade
                 setTimeout(() => {
                     window.location.href = href;
-                }, 200);
+                }, 80);
             }
         });
     });
