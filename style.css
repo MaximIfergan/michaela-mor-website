@@ -68,7 +68,7 @@ body.no-scroll {
 }
 
 body.no-scroll .hero {
-    height: calc(100vh - 80px);
+    height: calc(100vh - 100px);
     padding: 10px 20px 20px;
 }
 
