@@ -143,12 +143,16 @@ def compress_images(folder_path):
                     'magick', str(img_path),
                     '-resize', '1920x1920>',
                     '-quality', '85',
+                    '-gravity', 'southeast',
+                    '-pointsize', '18',
+                    '-fill', 'rgba(255,255,255,0.12)',
+                    '-annotate', '+15+15', '\u00a9 Michaela Mor',
                     str(img_path)
                 ], capture_output=True, check=True)
             except subprocess.CalledProcessError:
-                print(f"  Warning: Could not compress {img_path.name}")
+                print(f"  Warning: Could not process {img_path.name}")
 
-    print("  Images compressed")
+    print("  Images compressed & watermarked")
 
 
 def generate_collection_html(collection):
