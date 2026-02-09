@@ -396,10 +396,21 @@ def main():
     total_works = sum(len(c['works']) for c in collections.values())
     print(f"SYNC COMPLETE - {len(collections)} collections, {total_works} works")
     print(f"{'=' * 55}")
-    print("\nNext steps:")
-    print('  git add .')
-    print('  git commit -m "Sync collections from Google Drive"')
-    print('  git push')
+
+    # Deploy to Cloudflare Pages
+    print(f"\n[Deploy] Deploying to Cloudflare Pages...")
+    try:
+        result = subprocess.run(
+            ['wrangler', 'pages', 'deploy', str(SCRIPT_DIR),
+             '--project-name=michaela-mor-portfolio']
+        )
+        if result.returncode != 0:
+            print("\n  Deploy failed. Make sure wrangler is installed and you're logged in:")
+            print("    npm install -g wrangler")
+            print("    wrangler login")
+    except FileNotFoundError:
+        print("  wrangler not found. Install it with: npm install -g wrangler")
+        print("  Then log in with: wrangler login")
 
 
 if __name__ == '__main__':
