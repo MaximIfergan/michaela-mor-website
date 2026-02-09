@@ -12,6 +12,7 @@ then generates collection pages and updates gallery.html.
 """
 
 import csv
+import html
 import os
 import re
 import shutil
@@ -28,6 +29,7 @@ GDRIVE_BASE = Path(
 )
 
 CSV_FILENAME = "Works_Metadata.csv"
+ABOUT_FILENAME = "About.txt"
 
 
 def slugify(name):
@@ -309,6 +311,132 @@ def generate_gallery_html(collections_list):
     return html
 
 
+def read_about(txt_path):
+    """Read About.txt and parse into sections."""
+    sections = {}
+    current_section = None
+    current_lines = []
+
+    with open(txt_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.rstrip('\n')
+            if line.startswith('## '):
+                if current_section:
+                    sections[current_section] = current_lines
+                current_section = line[3:].strip()
+                current_lines = []
+            elif current_section is not None:
+                current_lines.append(line)
+
+    if current_section:
+        sections[current_section] = current_lines
+
+    # Strip leading/trailing blank lines from each section
+    for key in sections:
+        while sections[key] and sections[key][0] == '':
+            sections[key].pop(0)
+        while sections[key] and sections[key][-1] == '':
+            sections[key].pop()
+
+    return sections
+
+
+def sanitize_text(text):
+    """HTML-escape text, then convert markdown [text](url) links to <a> tags."""
+    text = html.escape(text)
+    text = re.sub(
+        r'\[([^\]]+)\]\(([^)]+)\)',
+        r'<a href="\2" target="_blank">\1</a>',
+        text,
+    )
+    return text
+
+
+def generate_about_html(sections):
+    """Generate the about.html page from parsed About.txt sections."""
+    content_parts = []
+
+    # Bio (English)
+    if 'Bio (English)' in sections:
+        bio_en = ' '.join(sections['Bio (English)'])
+        bio_en = sanitize_text(bio_en)
+        content_parts.append(
+            f'                <ul>\n'
+            f'                    <li>{bio_en}</li>\n'
+            f'                </ul>'
+        )
+
+    # Bio (Hebrew)
+    if 'Bio (Hebrew)' in sections:
+        bio_he = '\n'.join(sections['Bio (Hebrew)'])
+        bio_he = sanitize_text(bio_he)
+        content_parts.append(
+            f'                <ul>\n'
+            f'                    <li dir="rtl" lang="he">{bio_he}</li>\n'
+            f'                </ul>'
+        )
+
+    # List sections
+    list_sections = [
+        'Education', 'Selected Exhibitions', 'Grants and Projects',
+        'Collections', 'Publications',
+    ]
+    for section_name in list_sections:
+        if section_name not in sections:
+            continue
+        lines = [l for l in sections[section_name] if l.strip()]
+        if not lines:
+            continue
+        items = '\n'.join(
+            f'                        <li>{sanitize_text(l)}</li>'
+            for l in lines
+        )
+        content_parts.append(
+            f'                    <h3>{section_name}</h3>\n'
+            f'                    <ul>\n{items}\n'
+            f'                    </ul>'
+        )
+
+    content_html = '\n\n'.join(content_parts)
+
+    html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Michaela Mor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Michaela Mor</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="gallery.html">Works</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- About Content -->
+    <section class="about-content">
+        <div class="container">
+            <div class="about-text-single">
+{content_html}
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
+'''
+    return html
+
+
 def clean_old_collections(collections):
     """Remove old collection HTML files that are no longer in the CSV."""
     existing = list(SCRIPT_DIR.glob('collection-*.html'))
@@ -340,14 +468,14 @@ def main():
         return
 
     # Read CSV
-    print(f"\n[1/5] Reading {CSV_FILENAME}...")
+    print(f"\n[1/6] Reading {CSV_FILENAME}...")
     collections = read_csv(csv_path)
     print(f"  Found {len(collections)} collections:")
     for name, col in collections.items():
         print(f"    - {name} ({len(col['works'])} works, {col['year']})")
 
     # Copy images
-    print(f"\n[2/5] Copying images from Google Drive...")
+    print(f"\n[2/6] Copying images from Google Drive...")
     all_warnings = []
     for name, col in collections.items():
         dest = SCRIPT_DIR / 'images' / 'Gallery' / name
@@ -356,14 +484,14 @@ def main():
         all_warnings.extend(warnings)
 
     # Compress images
-    print(f"\n[3/5] Compressing images...")
+    print(f"\n[3/6] Compressing images...")
     for name in collections:
         dest = SCRIPT_DIR / 'images' / 'Gallery' / name
         if dest.exists():
             compress_images(dest)
 
     # Generate collection pages
-    print(f"\n[4/5] Generating collection pages...")
+    print(f"\n[4/6] Generating collection pages...")
     clean_old_collections(collections)
     for name, col in collections.items():
         html = generate_collection_html(col)
@@ -373,7 +501,7 @@ def main():
         print(f"  Created: {output_file.name}")
 
     # Generate gallery.html
-    print(f"\n[5/5] Generating gallery.html...")
+    print(f"\n[5/6] Generating gallery.html...")
     # Sort by year descending (newest first)
     sorted_collections = sorted(
         collections.values(),
@@ -384,6 +512,18 @@ def main():
     with open(SCRIPT_DIR / 'gallery.html', 'w', encoding='utf-8') as f:
         f.write(gallery_html)
     print("  Updated: gallery.html")
+
+    # Generate about.html
+    about_path = GDRIVE_BASE / ABOUT_FILENAME
+    print(f"\n[6/6] Generating about.html...")
+    if about_path.exists():
+        sections = read_about(about_path)
+        about_html = generate_about_html(sections)
+        with open(SCRIPT_DIR / 'about.html', 'w', encoding='utf-8') as f:
+            f.write(about_html)
+        print(f"  Updated: about.html ({len(sections)} sections)")
+    else:
+        print(f"  Skipped: {ABOUT_FILENAME} not found in Google Drive folder")
 
     # Summary
     print(f"\n{'=' * 55}")
