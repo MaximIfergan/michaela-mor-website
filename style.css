@@ -372,7 +372,7 @@ a {
 }
 
 .about-text-single h3 {
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     margin-top: 30px;
     margin-bottom: 15px;
     font-weight: 400;
@@ -382,7 +382,7 @@ a {
 .about-text-single p {
     margin-bottom: 15px;
     line-height: 1.7;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
 }
 
 .about-text-single ul {
@@ -394,7 +394,7 @@ a {
     padding: 8px 0;
     border-bottom: 1px solid var(--border-color);
     line-height: 1.6;
-    font-size: 0.85rem;
+    font-size: 1rem;
 }
 
 .about-text-single ul li:last-child {
