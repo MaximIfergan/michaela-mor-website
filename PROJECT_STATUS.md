@@ -1,14 +1,17 @@
 # Project Status - Michaela Mor Portfolio
 
 **Last Updated:** February 9, 2026
-**Live Site:** https://maximifergan.github.io/michaela-mor-portfolio/
-**Repository:** https://github.com/MaximIfergan/michaela-mor-portfolio
+**Live Site:** https://michaela-mor.com
+**Hosting:** Cloudflare Pages (project: michaela-mor-portfolio)
+**Domain Registrar:** Cloudflare
+**Repository:** https://github.com/MaximIfergan/michaela-mor-portfolio (private)
 
 ---
 
 ## Current State: LIVE
 
-The website is deployed and functional on GitHub Pages.
+The website is deployed on Cloudflare Pages with a custom domain.
+Migrated from GitHub Pages to Cloudflare Pages for custom domain support + private repo.
 
 ---
 
@@ -22,6 +25,8 @@ The website is deployed and functional on GitHub Pages.
 - Fast page transitions (~180ms)
 - Mobile responsive design
 - Automated sync pipeline from Google Drive
+- Auto-deploy to Cloudflare Pages via wrangler (integrated in sync-website.py)
+- Custom domain: michaela-mor.com (SSL via Cloudflare)
 
 ---
 
@@ -65,16 +70,27 @@ The website is deployed and functional on GitHub Pages.
 
 ## How to Continue
 
-### Syncing from Google Drive
+### Syncing & Deploying (one command)
 ```bash
 # Michaela updates Google Sheet, exports CSV to Drive folder
 # Then run:
 python3 sync-website.py
+# This syncs from Google Drive AND deploys to Cloudflare Pages automatically
+```
 
-# Push:
+### Backing up to Git (optional, recommended)
+```bash
 git add .
-git commit -m "Sync collections from Google Drive"
+git commit -m "sync website"
 git push
+```
+Git is no longer required for deployment, but recommended for version history and backup.
+
+### Making CSS/HTML Changes
+```bash
+# Edit files, then deploy:
+wrangler pages deploy . --project-name=michaela-mor-portfolio
+# Or run sync-website.py which deploys at the end
 ```
 
 ### Michaela's Workflow
@@ -96,12 +112,20 @@ Google Drive > צילומי תערוכות ועבודות > Website Works
 ### CSV Columns
 `Collection, Exhibitions, Year Presented, Artwork title, Year created, Medium, Dimensions, Image filename`
 
-### Making CSS/HTML Changes
+### Deployment Stack
+| Tool | Purpose |
+|------|---------|
+| Cloudflare Pages | Hosting (serves the website) |
+| Cloudflare DNS | Domain management (michaela-mor.com) |
+| Wrangler CLI | Deploys files from terminal to Cloudflare Pages |
+| Node.js / npm | Runtime for wrangler (`brew install node`, `npm install -g wrangler`) |
+| Git / GitHub | Version control & backup (private repo, not used for deployment) |
+
+### First-Time Setup (new machine)
 ```bash
-git add .
-git commit -m "Description"
-git push
-# Live in ~1 minute
+brew install node
+npm install -g wrangler
+wrangler login
 ```
 
 ---
@@ -122,11 +146,6 @@ git push
 ---
 
 ## Technical Reference
-
-### Git Config
-```bash
-git config http.postBuffer 524288000  # 500MB buffer for large pushes
-```
 
 ### Image Compression
 Handled automatically by `sync-website.py` (max 1920px, 85% quality via ImageMagick)
