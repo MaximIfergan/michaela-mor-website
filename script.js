@@ -39,7 +39,7 @@ galleryItems.forEach(item => {
         const year = this.getAttribute('data-year');
         const medium = this.getAttribute('data-medium');
 
-        lightbox.style.display = 'block';
+        lightbox.style.display = 'flex';
         lightboxImg.src = img.src;
         lightboxTitle.textContent = title;
         lightboxInfo.textContent = `${year} | ${medium}`;
@@ -69,7 +69,7 @@ function closeLightbox() {
 
 // Close lightbox with Escape key
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && lightbox && lightbox.style.display === 'block') {
+    if (e.key === 'Escape' && lightbox && lightbox.style.display === 'flex') {
         closeLightbox();
     }
 });
