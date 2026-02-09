@@ -20,7 +20,7 @@ Migrated from GitHub Pages to Cloudflare Pages for custom domain support + priva
 - Home page with hero image (static, no scroll)
 - Works page with collection-based gallery grid
 - Collection pages with lightbox gallery (4 collections, 38 works)
-- About page with CV
+- About page with CV (auto-generated from About.txt in Google Drive)
 - Contact page with email + Instagram
 - Fast page transitions (~180ms)
 - Mobile responsive design
@@ -30,7 +30,29 @@ Migrated from GitHub Pages to Cloudflare Pages for custom domain support + priva
 
 ---
 
-## Recent Session (Feb 9, 2026)
+## Recent Session (Feb 9, 2026) - Session 2
+
+### Completed
+
+1. **Uniform Gallery Row Heights**
+   - Collection pages now display images at a fixed height per row
+   - Desktop: 300px, Tablet: 250px, Mobile: 280px
+   - Uses `object-fit: contain` to preserve full artwork without cropping
+
+2. **About Page Sync from Google Drive**
+   - Created `About.txt` in the Google Drive folder as the source of truth for the About page
+   - `sync-website.py` now reads `About.txt` and auto-generates `about.html` (step 6/6)
+   - Simple format: `## Section Name` headers, one item per line, `[text](url)` for links
+   - Sections: Bio (English), Bio (Hebrew), Education, Selected Exhibitions, Grants and Projects, Collections, Publications
+   - Text is HTML-sanitized (`html.escape`) before rendering to prevent XSS
+
+3. **About Page Cleanup**
+   - Removed colons after years in CV entries
+   - Fixed page title from "About - Artist Name" to "About - Michaela Mor"
+
+---
+
+## Previous Session (Feb 9, 2026) - Session 1
 
 ### Completed
 
@@ -97,12 +119,14 @@ wrangler pages deploy . --project-name=michaela-mor-portfolio
 1. Add/edit works in the Google Sheet
 2. Place images in the correct collection subfolder in Google Drive
 3. Export sheet as CSV (`Works_Metadata.csv`) to the Website Works folder
-4. Tell Maxim to run sync
+4. Edit `About.txt` in the Website Works folder to update the About/CV page
+5. Tell Maxim to run sync
 
 ### Google Drive Location
 ```
 Google Drive > צילומי תערוכות ועבודות > Website Works
 ├── Works_Metadata.csv
+├── About.txt
 ├── Collection/
 ├── Ink/
 ├── Nostalgia for the Present Body/
@@ -137,7 +161,7 @@ wrangler login
 | `index.html` | Home page |
 | `gallery.html` | Works listing (auto-generated) |
 | `collection-*.html` | Collection pages (auto-generated) |
-| `about.html` | CV page |
+| `about.html` | CV page (auto-generated from About.txt) |
 | `contact.html` | Contact info |
 | `style.css` | All styles |
 | `script.js` | Transitions, lightbox |
