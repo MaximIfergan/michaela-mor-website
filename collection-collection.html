@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection - Michaela Mor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Michaela Mor</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="gallery.html" class="active">Works</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Collection Gallery -->
+    <section class="gallery">
+        <div class="container">
+            <div class="gallery-grid">
+                <div class="gallery-item" data-title="Above the garden" data-year="2024" data-medium="Oil and acrylic on canvas, 150x150 cm">
+                    <img src="images/Gallery/Collection/01_above_the_garden.jpg" alt="Above the garden">
+                    <div class="gallery-item-info">
+                        <h3>Above the garden</h3>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-title="From a moment within" data-year="2024" data-medium="Oil and acrylic on canvas, 120x120 cm">
+                    <img src="images/Gallery/Collection/02_from_a_moment_within.jpeg" alt="From a moment within">
+                    <div class="gallery-item-info">
+                        <h3>From a moment within</h3>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-title="Daydream" data-year="2024" data-medium="Oil and acrylic on canvas, 170x135 cm">
+                    <img src="images/Gallery/Collection/03_daydream.jpg" alt="Daydream">
+                    <div class="gallery-item-info">
+                        <h3>Daydream</h3>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-title="See the end" data-year="2024" data-medium="Oil and acrylic on canvas, 130X110 cm">
+                    <img src="images/Gallery/Collection/04_see_the_end.jpg" alt="See the end">
+                    <div class="gallery-item-info">
+                        <h3>See the end</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back to Works Link -->
+            <div class="back-link">
+                <a href="gallery.html">&larr; Back to Works</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div class="lightbox-caption">
+            <h3 id="lightbox-title"></h3>
+            <p id="lightbox-info"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

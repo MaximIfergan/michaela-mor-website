@@ -1,7 +1,7 @@
 // ===== PAGE TRANSITION EFFECT =====
 document.addEventListener('DOMContentLoaded', function() {
     // Add click listeners to all internal links
-    const links = document.querySelectorAll('a[href^="index.html"], a[href^="gallery.html"], a[href^="about.html"], a[href^="contact.html"], a[href^="exhibition"]');
+    const links = document.querySelectorAll('a[href^="index.html"], a[href^="gallery.html"], a[href^="about.html"], a[href^="contact.html"], a[href^="collection"]');
 
     links.forEach(link => {
         link.addEventListener('click', function(e) {
