@@ -59,7 +59,7 @@ def read_csv(csv_path):
 
             work = {
                 'filename': row.get('Image filename', '').strip(),
-                'title': row.get('Artwork title', '').strip() or 'Untitled',
+                'title': row.get('Artwork title', '').strip(),
                 'year_created': row.get('Year created', '').strip(),
                 'year_presented': row.get('Year Presented', '').strip(),
                 'medium': row.get('Medium', '').strip(),

@@ -46,7 +46,11 @@ The website is deployed and functional on GitHub Pages.
    - Ink (16 works, 2024)
    - Nostalgia for the Present Body (10 works, 2023)
 
-4. **Cleanup**
+4. **Watermark**
+   - All images get a subtle "© Michaela Mor" watermark (12% opacity, bottom-right)
+   - Applied automatically during the compression step via ImageMagick
+
+5. **Cleanup**
    - Removed old exhibition-1 through exhibition-4 (placeholder content)
    - Removed old add-exhibition.py and EXHIBITION_TEMPLATE.md
    - Removed Bezalel Academy images

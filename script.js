@@ -42,6 +42,7 @@ galleryItems.forEach(item => {
         lightbox.style.display = 'flex';
         lightboxImg.src = img.src;
         lightboxTitle.textContent = title;
+        lightboxTitle.style.display = title ? 'block' : 'none';
         lightboxInfo.textContent = `${year} | ${medium}`;
 
         // Prevent body scroll when lightbox is open
